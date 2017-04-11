@@ -1,0 +1,68 @@
+<!--
+
+index.html
+
+Free Code Camp - APIs
+
+-->
+
+<!DOCTYPE html>
+<html> 
+  <head>
+      
+    <title>URL Shortener Microservice</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- http://getbootstrap.com/ -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    
+    <!-- app's own CSS -->
+    <link href="/css/styles.css" rel="stylesheet"/>
+    
+  </head>
+  
+  <body>
+      
+    <div class="page-header">
+      <h1>URL Shortener Microservice</h1>
+    </div>
+    
+    <div class="container">
+        
+      <h2>What is this?</h2>
+     
+      <p>This is a microservice API project for Free Code Camp that is intended to return the information of the url requested.</p>
+      <p>If the url does exist, it shows the "short number" of the url.</p>
+      <p>If the url doesn't exist, it assigns a "short number" and the shows you the result of the url and its "short number" associated.</p>
+      <p>If the url is a number associated to an url, it sends you to the respective associated url.</p>
+      <p>* If you pass a valid url without https or http, it will assign automatically an https to the beginning</p>
+        
+      <blockquote>
+          <h3>User stories:</h3>
+          <ul>1) I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.</ul>
+          <ul>2) If I pass an invalid URL that doesn't follow the valid http://www.example.com format, the JSON response will contain an error instead.</ul>
+          <ul>3) When I visit that shortened URL, it will redirect me to my original link.</ul>
+      </blockquote>
+        
+      <h3 id="yo">Usage:</h3>
+      
+      <p>Wrong Entry:</p>
+      <pre><a href="https://urlshort-vp.herokuapp.com/htts//:good432" target='_blank'>https://urlshort-vp.herokuapp.com/htts//:good432</a></pre>
+      <p>Right Entries:</p>
+      <pre><a href="https://urlshort-vp.herokuapp.com/https://www.google.com" target='_blank'>https://urlshort-vp.herokuapp.com/https://www.google.com</a></pre>
+      <pre><a href="https://urlshort-vp.herokuapp.com/www.google.com" target='_blank'>https://urlshort-vp.herokuapp.com/www.google.com</a></pre>
+      <pre><a href="https://urlshort-vp.herokuapp.com/8" target='_blank'>https://urlshort-vp.herokuapp.com/8</a>   ** as a short URL **</pre>
+      
+      <h3>Example Response:</h3>
+      
+      <p>Error response from Wrong Entry:</p>
+      <pre>{"error":"Sorry, wrong entry : 'htts//:good432', please try another Url"}</pre>
+      <p>Response from Right Entries:</p>
+      <pre>{"long_url":"https://www.google.com","short_url":8}</pre>
+      <pre>Or... Directly to the requested url page</pre>
+      
+    </div>
+    
+  </body>
+</html>

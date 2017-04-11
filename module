@@ -1,0 +1,341 @@
+//functions to export
+module.exports = {
+    validUrl,
+    seeIfExpected,
+    processInfo
+};
+
+
+/*
+    Boolean function that sees if url is valid or not
+*/
+function validUrl(url) {
+    //Regex taken from https://gist.github.com/dperini/729294
+    //var regex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+    //didn't worked as desired ...
+    
+    //http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+    //this works pretty good, but I have to determine if cases as "google.com" should be passed too
+    var regex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g;
+    return regex.test(url);
+}
+
+function  editUrl(url) {
+    if(!/http/g.test(url)) { //means it has not http or http beginning
+        return "https://" + url;
+    }
+}
+
+/*
+    Function that sees if what has been passed is something that we expected
+    and works with
+*/
+function seeIfExpected(url) {
+    if (validUrl(url) == true) {
+        //put into db and asign number
+        return "url";
+    }
+    else if (!isNaN(url) && +url > 0) { //si isNan(arg) devuelve false, significa que es un numero sea en plena forma como string)
+        //check if it's already in db, if not, return "no such direction found (or something like that)"
+        return "num";
+    }
+    else {
+        return "na";
+    }
+}
+
+/**
+    Renders view, passing in values. (inspired in CS50 class similar function)
+*/
+/*
+function render(res, viewFolder, view, $values) {
+    //http://stackoverflow.com/questions/35374966/listen-to-res-sendfile-errors-in-express
+    //http://expressjs.com/en/api.html#res.sendFile
+    var path = require("path");
+    var fs = require('fs');
+    var viewPath = path.join(__dirname, "/" + viewFolder + "/" + view);
+    console.log(viewPath);
+    //var options = {
+      //  root: viewFolder
+    //}
+    // if view exists, render it
+    //http://stackoverflow.com/questions/17699599/node-js-check-exist-file
+    fs.stat(viewPath, function (err, stat) {
+        if (err == null) { //file exists
+            res.sendFile(path.join(__dirname, "/" + viewFolder + "/header.html"));
+            res.sendFile(viewPath);
+            res.sendFile(path.join(__dirname, "/" + viewFolder + "/footer.html"));
+        } else if(err.code == 'ENOENT') {
+            // file does not exist
+            fs.writeFile('log.txt', 'Some log\n');
+            console.log("Error: didn't find the file: ", view);
+        }
+        else {
+            console.log('Some other error: ', err.code);
+        }
+    });
+    
+    //res.sendFile(view, options, function(err) {
+//        if (err) {
+  //          console.log(err);
+    //        res.status(err.status).end();
+      //  } //else
+//        console.log('Sent: ', view);
+        //}
+  //  });
+    
+    //if (res.sendFile("../views/{$view}"))
+    //{
+        // extract variables into local scope
+        //extract($values);
+
+        // render view (between header and footer)
+        //require("../views/header.php");
+        //require("../views/{$view}");
+       // require("../views/footer.php");
+   //     exit;
+   // }
+}
+*/
+
+/*
+    Function that sees if what has been passed is something that we expected
+    and works with
+*/
+function processInfo(a, url, cb) {
+    
+    if (a == "na") {
+        cb ({
+            found: false,
+            info: "Sorry, wrong entry : '" + url + "', please try another Url",
+            jsonRes: true
+        });
+        return;
+    }
+    //else continue with the info processing
+
+    //lets require/import the mongodb native drivers.
+    var mongodb = require('mongodb');
+        
+    //We need to work with "MongoClient" interface in order to connect to a mongodb server.
+    var MongoClient = mongodb.MongoClient;
+        
+    // Connection URL. This is where your mongodb server is running.
+        
+    //to connect: mongod --port 27017 --dbpath=./data --smallfiles
+    //--smallfiles because having a free account doesn't let the program to expand in space.
+        
+    //(Focus on This Variable) //process.env.MONGOLAB_URI
+    var dbUrl = 'mongodb://vp:urlshort@ds157390.mlab.com:57390/urlshort' || 'mongodb://localhost:27017/C3url';      
+    //(Focus on This Variable)
+        
+    // Use connect method to connect to the Server
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('Unable to connect to the mongoDB server. Error:', err);
+            cb(err);
+        } else {
+            console.log('Connection established to', dbUrl);
+           
+            searchInDb(url, db, function (obj) {
+                console.log("showing in result");
+                console.log(obj);
+                cb(obj);
+                //Close connection
+                db.close();
+            });
+        }
+    });
+}
+
+/*
+You may have to create the data directory.
+
+    mkdir data
+
+To start mongo on port 27017, run mongod --port 27017 --dbpath=./data
+
+Then, in another terminal, run npm install mongodb.
+
+ALSO
+TO know ignored files: git status --ignored
+
+ALSO COULDN' BE ABLE TO IGNORE DATA CONTENT IN COMMIT.. 
+http://stackoverflow.com/questions/21168846/cant-remove-file-from-git-commit
+*/
+
+/*
+    Insert url into database
+*/
+function intoDb(url, db, cb) {
+    //Sources:  http://www.alexjamesbrown.com/blog/development/mongodb-incremental-ids/
+    //          https://docs.mongodb.com/v3.0/tutorial/create-an-auto-incrementing-field/
+    //(Uused)   https://www.npmjs.com/package/mongodb-autoincrement
+    //Mongo db assigns automatically an _id to each thing inserted, we can determine this _id
+    var autoIncrement = require("mongodb-autoincrement");
+    
+    autoIncrement.getNextSequence(db, "urls", function(err, autoIndex) {
+        if (err) { console.log("Error in inserting info: " + err); }
+        var urls = db.collection('urls');
+        urls.insert({
+            _id: autoIndex,
+            url: url
+        });
+        
+        cb({
+            _id: autoIndex,
+            url: url
+        });
+        db.close();
+    });
+
+}
+
+/*
+    Search into DB and respond according to match or not match
+*/
+function searchInDb(url, db, cb) {
+    console.log("searching");
+    // **¡¡ Seems that when making DataBase calls we should be coutious because it works as asynchronious calls, so,
+    //      the content of the functions may be analysed after the external fluid of the major function !!**
+    console.log(url);
+    var obj = {};
+    var isNum = false;
+    if (!isNaN(url)) { //si isNan(arg) devuelve false, significa que es un numero sea en plena forma como string
+        obj = {
+            _id: + url 
+        };
+        isNum = true;
+    } else {
+        if(!/http/g.test(url)) { //means it has not http or http beginning
+            url = "https://" + url;
+        }
+        obj = {
+            url: url
+        };
+    }
+    console.log(obj);
+    var urls = db.collection('urls');
+    seeEverySingleDocumentInCollection(urls);
+    urls.find(obj, function(err, info) {
+        if (err) { console.log("Error in searching for document in Urls Collection"); }
+
+        info.toArray(function(err, data) {
+            if (err) { console.log("Error in searching for document in Urls Collection"); }
+            console.log(data);
+            console.log(data.length);
+            if (data.length == 0) {
+                if (isNum == true) {
+                    //Inserted number, but didn't find anything
+                    console.log("didn't find any url associated to the number");
+                    cb ({
+                        found: false,
+                        info: "Didn't find " + url + " as a number associated to an url, please try again",
+                        jsonRes: true
+                    });
+                } else {
+                    //Insert into db and asign number
+                    console.log("inserting");
+                    //intoDb(url, db, cb);
+                    //Sources:  http://www.alexjamesbrown.com/blog/development/mongodb-incremental-ids/
+                    //          https://docs.mongodb.com/v3.0/tutorial/create-an-auto-incrementing-field/
+                    //(Uused)   https://www.npmjs.com/package/mongodb-autoincrement
+                    //Mongo db assigns automatically an _id to each thing inserted, we can determine this _id
+                    var autoIncrement = require("mongodb-autoincrement");
+                    
+                    autoIncrement.getNextSequence(db, "urls", function(err, autoIndex) {
+                        if (err) { console.log("Error in inserting info: " + err); }
+                        var urls = db.collection('urls');
+                        urls.insert({
+                            _id: autoIndex,
+                            url: url
+                        });
+                        console.log("autoindex: " + autoIndex);
+                        cb({
+                            found: false,
+                            info: "inserted",
+                            jsonRes: true,
+                            id: autoIndex,
+                            url: url
+                        });
+                    });
+                    //return objIns;
+                }
+            } else {
+                console.log("founded match");
+                //We found a match, return matched values
+                var toJson = false;
+                if (isNum == false) {
+                    toJson = true;
+                }
+                cb ({
+                    found: true,
+                    info: "found coincidence",
+                    jsonRes: toJson,
+                    url: data[0].url,
+                    id: data[0]._id
+                });
+            }
+        });
+    });
+    //If we wanted to delete something (debugging)
+    //urls.remove({_id: 13});
+    
+    
+    // ** -- STUFF MAYBE USEFUL ANOTHER TIME -- **
+    // ** -- No need to search for collections -- **
+    //db.collectionNames(function(err, collections){
+    //using >2.0 version of the drive 
+    //http://stackoverflow.com/questions/33214175/db-collectionnames-doesnt-work-in-node-js
+    //var collArr = [];
+    //db.listCollections().toArray(function(err, collections){
+        //if (err) { console.log("Error in searching DB collections"); }
+        //console.log(collections)
+        //collArr = collections;   
+        //return collArr;
+    //}); 
+    
+    //db.collection('urls').find({}, function(err, cursor) {
+//        if (err) { console.log("Error vfvfsddfss"); }
+  //      cursor.toArray(function(err, data) {
+    //        if (err) { console.log("Error vfvfsddfss"); }
+      //      console.log("data1:");
+        //    console.log(data);
+//        })
+  //  });
+
+    //urls.insert(urlObj, function(err, data) {
+        //if (err) console.log(err);
+        //console.log(JSON.stringify(urlObj));
+    //});
+}
+
+/*
+    Search in the array of Objects corresponding to collection names
+    Ex: collections = [{"name": "coll1"}, {"name": "coll2"}]
+*/
+function searchDbName(arr, title) {
+    for (var i=0; i < arr.length; i++) {
+        if (arr[i].name == title) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+function seeEverySingleDocumentInCollection(coll) {
+    coll.find({}, function (err, info) {
+    if (err) { console.log("Error in searching for document in Urls Collection"); }
+    //console.log(info);
+    info.toArray(function(err, data) {
+            
+        if (err) { console.log("Error in searching for document in Urls Collection"); }
+            console.log(data);
+        });
+    });
+}
+
+function deleteDoc(objName, dbColl) {
+    dbColl.remove(objName)
+}
