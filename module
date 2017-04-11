@@ -125,7 +125,7 @@ function processInfo(a, url, cb) {
     //to connect: mongod --port 27017 --dbpath=./data --smallfiles
     //--smallfiles because having a free account doesn't let the program to expand in space.
         
-    //(Focus on This Variable) //process.env.MONGOLAB_URI
+    //(Focus on This Variable) //process.env.MONGOLAB_URI ... mongodb://vp:urlshort@ds157390.mlab.com:57390/urlshort
     var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/C3url';      
     //(Focus on This Variable)
         
