@@ -126,7 +126,7 @@ function processInfo(a, url, cb) {
     //--smallfiles because having a free account doesn't let the program to expand in space.
         
     //(Focus on This Variable) //process.env.MONGOLAB_URI
-    var dbUrl = 'mongodb://vp:urlshort@ds157390.mlab.com:57390/urlshort' || 'mongodb://localhost:27017/C3url';      
+    var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/C3url';      
     //(Focus on This Variable)
         
     // Use connect method to connect to the Server
