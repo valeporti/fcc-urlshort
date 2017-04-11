@@ -25,12 +25,18 @@ Wrong Entry:
 
 Right Entries:
 `https://urlshort-vp.herokuapp.com/https://www.google.com`
+
 `https://urlshort-vp.herokuapp.com/www.google.com`
+
 `https://urlshort-vp.herokuapp.com/8`     ** as a short URL **
 
 ## Example Response:
 Error response from Wrong Entry:
+
 `{"error":"Sorry, wrong entry : 'htts//:good432', please try another Url"}`
+
 Response from Right Entries:
+
 `{"long_url":"https://www.google.com","short_url":8}`
+
 `Or... Directly to the requested url page`
