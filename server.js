@@ -24,6 +24,12 @@ app.get("/", function(req, res) {
    // mod.render(res, 'views', "index.html", []);
 });
 
+app.get("/lessons/", function(req, res) {
+    console.log(req.url);
+    console.log("pasó por lessons");
+    res.render('lessons.html');
+});
+
 app.get("*", function(req, res) {
     var usageReq = false;
     var urlPassed = req.url;
