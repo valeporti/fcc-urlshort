@@ -1,9 +1,12 @@
 var express = require('express');
 var app = express();
 var mod = require('./module');
+var path = require('path');
 
 app.use(express.static('public'));
 app.use(express.static('views'));
+
+//app.set('views', path.join(__dirname, 'views'));
 
 //using MongoDB and deploying to Herok reference
 //https://community.c9.io/t/setting-up-mongodb/1717
@@ -16,22 +19,29 @@ app.listen(port, function() {
     console.log('Node.js listening on port ' + port);
 });
 
-//if 
+/*
 app.get("/", function(req, res) {
     console.log("pasó por /");
     //http://stackoverflow.com/questions/17014384/how-to-render-multiple-ejs-files-in-nested-form-in-node-js-and-express
     res.render('index.html');
-   // mod.render(res, 'views', "index.html", []);
+    //mod.render(res, 'views', "index.html", []);
 });
 
-app.get("/lessons/", function(req, res) {
+app.get("/lessons", function(req, res) {
     console.log(req.url);
     console.log("pasó por lessons");
-    res.render('lessons.html');
+    
+    res.render('lessons.html', function(err, html) {
+        if(err) {
+            console.log(err);
+        }
+        res.send(html);
+    });
 });
+*/
 
 app.get("*", function(req, res) {
-    var usageReq = false;
+    //var usageReq = false;
     var urlPassed = req.url;
     urlPassed = urlPassed.substring(1, urlPassed.length); //remove first "/"
     

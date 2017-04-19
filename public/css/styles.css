@@ -30,3 +30,12 @@ body {
 .btnPush:hover {
     background-color: #CCDFCB;
 }
+
+.ttlBtn {
+    margin: 25px 0;
+    float: right;
+}
+.h1cl {
+    width: 50%;
+    display: inline-block;
+}

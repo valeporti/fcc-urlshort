@@ -30,29 +30,62 @@ Free Code Camp - APIs
     
     <div class="container">
         
-      <h2>What is s?</h2>
-     
-      <p>This is a microservice API project for Free Code Camp that is intended to return the information of the url requested.</p>
-      <p>If the url does exist, it shows the "short number" of the url.</p>
-      <p>If the url doesn't exist, it assigns a "short number" and the shows you the result of the url and its "short number" associated.</p>
-      <p>If the url is a number associated to an url, it sends you to the respective associated url.</p>
-      <p>* If you pass a valid url without https or http, it will assign automatically an https to the beginning</p>
-        
-      <blockquote>
-          <h3>User stories:</h3>
-          <ul>1) I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.</ul>
-          <ul>2) If I pass an invalid URL that doesn't follow the valid http://www.example.com format, the JSON response will contain an error instead.</ul>
-          <ul>3) When I visit that shortened URL, it will redirect me to my original link.</ul>
-      </blockquote>
-        
-      <h3 id="yo">Usage:</h3>
+      <h4>Lesson 1 - res.render()</h4>
+      <DIR>
+      <p>
+        The fresher lesson that I learned, is the last, it caused me lots of trouble because I had problems with the <code>res.render</code> function 
+        from the <code>express.js</code> library and still can't handle the problem but I solved it other way. 
+      </p>
+      <p>
+        The thing is that I didn't managed to render other file than <code>index.html</code>, and I still don't know why it was triggering a 
+        <code>this.engine is not a function</code> error. If you know why or how to solve it, I would appreciate your 
+        <b><a href="http://stackoverflow.com/questions/43361109/express-js-render-error-this-engine-is-not-a-function?noredirect=1" target='_blank'>help</a></b>.
+      </p>
+      <p>
+        I solved the issue with the help of static files (<code>app.use(express.static("public"))</code>), so, being able to acces them direcly from the url: 
+        <code>https://page.c9users.io/lessons.html</code>.
+      </p>
+      </DIR>
       
-      <p>Wrong Entry:</p>
-      <pre><a href="https://urlshort-vp.herokuapp.com/htts//:good432" target='_blank'>https://urlshort-vp.herokuapp.com/htts//:good432</a></pre>
-      <p>Right Entries:</p>
-      <pre><a href="https://urlshort-vp.herokuapp.com/https://www.google.com" target='_blank'>https://urlshort-vp.herokuapp.com/https://www.google.com</a></pre>
-      <pre><a href="https://urlshort-vp.herokuapp.com/www.google.com" target='_blank'>https://urlshort-vp.herokuapp.com/www.google.com</a></pre>
-      <pre><a href="https://urlshort-vp.herokuapp.com/3" target='_blank'>https://urlshort-vp.herokuapp.com/3</a>   ** as a short URL **</pre>
+      <h4>Lesson 2 - mongodb connecting</h4>
+      <DIR>
+      <p>
+        Since my c9 account is free, I believe it doesn't let large sizes of files to be runed or because of security issues. I solved the "large files" 
+        warning by running the next command line: <code>mongod --port 27017 --dbpath=./data --smallfiles</code> (this command is supposing that there's already 
+        a "data" directory created).
+      </p>
+      </DIR>
+      
+      <h4>Lesson 3 - environnment variables</h4>
+      <DIR>
+      <p>
+        When deveolping projects and taking them to Heroku, 
+        <a href="https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Using-MongoDB-And-Deploying-To-Heroku" target='_blank'>in the help given by Free Code Camp</a>, 
+        they didn't tell how to prepare environnement variables at Heroku, so I did a 
+        <b><a href="https://devcenter.heroku.com/articles/config-vars" target='_blank'>little research </a></b>
+        and it's easy (maybe that's why).
+      </p>
+      <p>
+        You just have to edit config vars on your app’s settings tab on Dashboard (<code>go to your dashboard -> the app you want variables to be seted up -> 
+        settings (in there into "Config Variables")</code>): Put the name (or key) of the variable and its value.
+      </p>
+      </DIR>
+      
+      <h4>Lesson 4 - modifying .gitignore after commiting and pushing into gitHub</h4>
+      <DIR>
+      <p>
+        This lesson, shouldn't be named lesson because I can't understand how to manage this kind of changes. I understand that is becausethe <code>git history</code> 
+        record doesn't let some things to be ignored from one moment to another even ig we do the <code>git add .</code> command.
+      </p>
+      <p>
+        For these purposes, there are some techniques that I wasn't able to handle so, it remains a "to learn" activity. I did a little research and 
+        <b><a href="http://stackoverflow.com/questions/21168846/cant-remove-file-from-git-commit" target='_blank'>this </a></b>
+        is the closest that I got from the solution.
+      </p>
+      <p>
+        Although, my half-solution was to delete git files, and "re-init" it.
+      </p>
+      </DIR>
       
     </div>
     
