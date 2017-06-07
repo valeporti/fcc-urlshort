@@ -26,11 +26,11 @@ Wrong Entry:
 `https://urlshort-vp.herokuapp.com/htts//:good432`
 
 Right Entries:
-`https://urlshort-vp.herokuapp.com/https://www.google.com`
+[`https://urlshort-vp.herokuapp.com/https://www.google.com`](https://urlshort-vp.herokuapp.com/https://www.google.com)
 
-`https://urlshort-vp.herokuapp.com/www.google.com`
+[`https://urlshort-vp.herokuapp.com/www.google.com`](https://urlshort-vp.herokuapp.com/www.google.com)
 
-`https://urlshort-vp.herokuapp.com/8`     ** as a short URL **
+[`https://urlshort-vp.herokuapp.com/8`](https://urlshort-vp.herokuapp.com/8)     ** as a short URL **
 
 ## Example Response:
 Error response from Wrong Entry:
